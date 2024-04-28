@@ -2,11 +2,14 @@ from random import randint
 from tkinter import *
 
 window = Tk()
-window.title('Rock Paper Scissors ')
+
+img = PhotoImage(file='ribbon.png')
+window.wm_iconphoto(False, img)
+
+window.title('Rock Paper Scissors (cute version)')
 window.geometry("500x500")
 
-title = Label(window, text="Rock Paper Scissors (cute version)")
-title.grid(row=0, column=0)
+# title = Label(window, text="Rock Paper Scissors").grid(row=0, column=4)
 
 player = Label(window, text="Player").grid(row=1, column=1)
 vs = Label(window, text="vs").grid(row=1, column=2)
@@ -14,9 +17,9 @@ computer = Label(window, text="Computer").grid(row=1, column=3)
 
 result = Label(window, text="").grid(row=2, column=1)
 
-rock = Button(window, text="Rock", width=6, cursor="heart").grid(row=3, column=1)
-paper = Button(window, text="Paper", width=6, cursor="heart").grid(row=3, column=2)
-scissors = Button(window, text="Scissors", width=6, cursor="heart").grid(row=3, column=3)
+rock = Button(window, text="Rock", width=8, cursor="heart", bg="pink").grid(row=3, column=1, padx=5, pady=5)
+paper = Button(window, text="Paper", width=8, cursor="heart", bg="pink").grid(row=3, column=2, padx=5, pady=5)
+scissors = Button(window, text="Scissors", width=8, cursor="heart", bg="pink").grid(row=3, column=3, padx=5, pady=5)
 
 t = ["Rock", "Paper", "Scissors"]
 computer = t[randint(0,2)]
