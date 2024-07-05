@@ -1,6 +1,11 @@
 from random import randint
 import tkinter as tk
 import customtkinter
+from customtkinter import *
+from PIL import Image
+
+
+language = "english"
 
 
 class window(customtkinter.CTkFrame):
@@ -31,9 +36,9 @@ class window(customtkinter.CTkFrame):
         self.grid_rowconfigure(1, weight=2)
         self.grid_rowconfigure(2, weight=3)
         self.grid_rowconfigure(3, weight=3)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
+        self.grid_columnconfigure(0, weight=2)
+        self.grid_columnconfigure(1, weight=3)
+        self.grid_columnconfigure(2, weight=2)
 
 
         def action(x):
@@ -52,37 +57,89 @@ class window(customtkinter.CTkFrame):
             
             choice = ["Rock", "Paper", "Scissors"]
             computer = choice[randint(0,2)]
+
+            if computer == "Rock":
+                if language == "german":
+                    computerText = "Stein"
+                elif language == "english":
+                    computerText = "Rock"
+            elif computer == "Paper":
+                if language == "german":
+                    computerText = "Papier"
+                elif language == "english":
+                    computerText = "Paper"
+            elif computer == "Scissors":
+                if language == "german":
+                    computerText = "Schere"
+                elif language == "english":
+                    computerText = "Scissors"
+
             match x:
                 case "Rock":
                     player = "Rock"
+                    if language == "german":
+                        playerText = "Stein"
+                    elif language == "english":
+                        playerText = "Rock"
                 case "Paper":
                     player = "Paper"
+                    if language == "german":
+                        playerText = "Papier"
+                    elif language == "english":
+                        playerText = "Paper"
                 case "Scissors":
                     player = "Scissors"
+                    if language == "german":
+                        playerText = "Schere"
+                    elif language == "english":
+                        playerText = "Scissors"
 
             if player == computer:
-                outcome_text = 'Tie!'
+                if language == "german":
+                    outcome_text = "Unentschieden!"
+                elif language == "english":
+                    outcome_text = "Tie!"
             elif player == "Rock":
                 if computer == "Paper":
-                    outcome_text = 'You lose! Computer covers player'
+                    if language == "german":
+                        outcome_text = "Sie verlieren! Computer deckt Spieler"
+                    elif language == "english":
+                        outcome_text = 'You lose! Computer covers player'
                 else:
-                    outcome_text = 'You win! Player smashes computer'
+                    if language == "german":
+                        outcome_text = "Sie haben gewonnen! Spieler zertrümmert Computer"
+                    elif language == "english":
+                        outcome_text = 'You win! Player smashes computer'
             elif player == "Paper":
                 if computer == "Scissors":
-                    outcome_text = 'You lose! Computer cuts player'
+                    if language == "german":
+                        outcome_text = "Sie verlieren! Computer schneidet Spieler"
+                    elif language == "english":
+                        outcome_text = 'You lose! Computer cuts player'
                 else:
-                    outcome_text = 'You win! Player covers computer'
+                    if language == "german":
+                        outcome_text = "Sie haben gewonnen! Spieler deckt Computer"
+                    elif language == "english":
+                        outcome_text = 'You win! Player covers computer'
             elif player == "Scissors":
                 if computer == "Rock":
-                    outcome_text = 'You lose! Computer smashes player'
+                    if language == "german":
+                        outcome_text = "Sie haben verloren! Computer zerschlägt Spieler"
+                    elif language == "english":
+                        outcome_text = 'You lose! Computer smashes player'
                 else:
-                    outcome_text = 'You win! Player cuts computer'
+                    if language == "german":
+                        outcome_text = "Sie haben gewonnen! Spieler schneidet Computer"
+                    elif language == "english":
+                        outcome_text = 'You win! Player cuts computer'
 
-            self.result_player.configure(text=player)
-            self.result_computer.configure(text=computer)
+            self.result_player.configure(text=playerText)
+            self.result_computer.configure(text=computerText)
             self.outcome.configure(text=outcome_text)
 
-            self.restart = customtkinter.CTkButton(self, text="Try again", text_color="white", font=(self.font, 14), fg_color="#FFC0CB", hover_color="#FF92A5", command=tryagain, height=8, width=8)
+            retry = customtkinter.CTkImage(light_image=Image.open("retry.png"), dark_image=Image.open("retry.png"), size=(20, 20))
+
+            self.restart = customtkinter.CTkButton(self, image=retry, text="", fg_color="#FFC0CB", hover_color="#FF92A5", command=tryagain, height=8, width=8)
             self.restart.grid(row=3, column=1, padx=20, sticky="ew")
 
         def tryagain():
@@ -99,15 +156,47 @@ class window(customtkinter.CTkFrame):
 class root(customtkinter.CTk):
     def __init__(self):
         super().__init__(fg_color="white")
-        self.geometry("500x500")
-        self.grid_rowconfigure(0, weight=1)
+        self.geometry("600x500")
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
         self.title('Rock Paper Scissors (cute version)')
         self.iconbitmap('icon.ico')
 
+        self.font = customtkinter.CTkFont(family='Georgia', size=12)
+
         self.window_frame = window(master=self)
-        self.window_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.window_frame.grid(row=1, column=0, padx=20, pady=20, sticky="nsew")
+
+
+        def switchLanguage():
+            global language
+            if language == "english":
+                language = "german"
+            else:
+                language = "english"
+
+            if language == "german":
+                playerText = "Spieler"
+                rockText = "Stein"
+                paperText = "Papier"
+                scissorsText = "Schere"
+            elif language == "english":
+                playerText = "Player"
+                rockText = "Rock"
+                paperText = "Paper"
+                scissorsText = "Scissors"
+
+
+            self.window_frame.player.configure(text=playerText)
+            self.window_frame.rock.configure(text=rockText)
+            self.window_frame.paper.configure(text=paperText)
+            self.window_frame.scissors.configure(text=scissorsText)
+
+
+        self.language = customtkinter.CTkButton(self, text="De/En", text_color="white", font=(self.font, 14), fg_color="#FFC0CB", hover_color="#FF92A5", command=switchLanguage, height=8, width=8)
+        self.language.grid(row=0, column=0, padx=20, sticky="ns")
 
 
 app = root()
